@@ -1,3 +1,5 @@
+#Create_origin
+
 def CreateOriginBox():
     box = App.ActiveDocument.addObject("Part::Box", "origin")
     box.Length = 10
