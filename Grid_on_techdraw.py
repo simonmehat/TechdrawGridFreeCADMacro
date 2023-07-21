@@ -256,9 +256,9 @@ def AddGridDimension(VertexNumber):
 
 
 # this function add annotation of the view (the name of the line is for example A, or 1)
-def AddGridAnnotation(VertexNumber, ListOfAnnotatioName, GridLineNumber):
+def AddGridAnnotation(VertexNumber, ListOfAnnotationName, GridLineNumber):
     print("---AddAnnotation")
-    print(VertexNumber, ListOfAnnotatioName, GridLineNumber)
+    print(VertexNumber, ListOfAnnotationName, GridLineNumber)
     Annotation = FreeCAD.ActiveDocument.addObject(
         'TechDraw::DrawRichAnno', 'GridAnnotation')  # Add annotation element
     Annotation.AnnoParent = dvp  # attach it on the techdraw view
@@ -270,25 +270,25 @@ def AddGridAnnotation(VertexNumber, ListOfAnnotatioName, GridLineNumber):
 
     Annotation.AnnoText = str(
         """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li { white-space: pre-wrap; }</style></head><body style=" font-family:'Ubuntu'; font-size:15pt; font-weight:400; font-style:normal;"><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">""" + str(
-            DictionaryCharactersSurrounded[str(ListOfAnnotatioName[GridLineNumber])]) + """</p></body></html>""")  # Add text in HTML in the annotation. Use a dictionary  to place surrounded letter
+            DictionaryCharactersSurrounded[str(ListOfAnnotationName[GridLineNumber])]) + """</p></body></html>""")  # Add text in HTML in the annotation. Use a dictionary  to place surrounded letter
     Annotation.ShowFrame = False
 
     # find the position of the vertex
     XposCalc = FindVertexPosition(VertexNumber)[0]
     YposCalc = FindVertexPosition(VertexNumber)[1]
 
-    if ListOfAnnotatioName[0] == 0:  # if grid line is horizontal
+    if ListOfAnnotationName[0] == 0:  # if grid line is horizontal
         Annotation.X = XposCalc * dvp.Scale - \
             SpaceBetweenGridAndDimension * 2  # place annotation
         Annotation.Y = (YposCalc - 1) * dvp.Scale
-        print(str(ListOfAnnotatioName[GridLineNumber]), str(XposCalc * dvp.Scale - SpaceBetweenGridAndDimension * 2),
+        print(str(ListOfAnnotationName[GridLineNumber]), str(XposCalc * dvp.Scale - SpaceBetweenGridAndDimension * 2),
               str((YposCalc - 1) * dvp.Scale))
 
-    elif ListOfAnnotatioName[0] == 90:  # if grid line is vertical
+    elif ListOfAnnotationName[0] == 90:  # if grid line is vertical
         Annotation.Y = YposCalc * dvp.Scale - \
             SpaceBetweenGridAndDimension * 2  # place annotation
         Annotation.X = (XposCalc - 1) * dvp.Scale
-        print(str(ListOfAnnotatioName[GridLineNumber]), str((XposCalc - 1) * dvp.Scale),
+        print(str(ListOfAnnotationName[GridLineNumber]), str((XposCalc - 1) * dvp.Scale),
               str(YposCalc * dvp.Scale - SpaceBetweenGridAndDimension * 2))
 
 
@@ -296,8 +296,8 @@ PositionList = OriginCorrection()
 Xpos = PositionList[0]
 Ypos = PositionList[1]
 TechDrawGridLine(GetSpreadsheetGridDimension("Grid", "B", 0),
-                 Xpos, Ypos, DrawingBoundingBox("Y"))
-TechDrawGridLine(GetSpreadsheetGridDimension("Grid", "D", 90),
                  Xpos, Ypos, DrawingBoundingBox("X"))
+TechDrawGridLine(GetSpreadsheetGridDimension("Grid", "D", 90),
+                 Xpos, Ypos, DrawingBoundingBox("Y"))
 
 print("---- End of Macro grid on techdraw ----")

@@ -6,7 +6,7 @@ def CreateOriginBox():  # Create the orgin box
     box.Width = 10
     box.Height = 10
     box.Placement = FreeCAD.Placement(
-        FreeCAD.Vector(-100, -100, 0), FreeCAD.Rotation(0, 0, 0))  # place the box
+        FreeCAD.Vector(-100, -100, -200), FreeCAD.Rotation(0, 0, 0))  # place the box
     box.recompute()
     box = App.ActiveDocument.getObjectsByLabel("origin")[0]
     # add length of the grid property
