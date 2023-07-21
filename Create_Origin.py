@@ -32,6 +32,20 @@ def CreateSpreadsheet():  # Create a spreadsheet
     sheet.set('C2', '2')
     sheet.set('C3', '3')
 
+    sheet.set('E1', 'CLT 0  -100')
+    sheet.set('E2', 'CLT 1 downside floor  +2660')
+    sheet.set('E3', 'CLT 1 upside floor  +2840')
+    sheet.set('E4', 'CLT 2 downside floor  +5620')
+    sheet.set('E5', 'CLT 2 upside floor  +5800')
+    sheet.set('F1', '-100')
+    sheet.set('F2', '2660')
+    sheet.set('F3', '2840')
+    sheet.set('F4', '5620')
+    sheet.set('F5', '5800')
+
+    sheet.setBackground('A1:A16384', (1.000000, 1.000000, 0.000000))
+    sheet.setBackground('C1:C16384', (1.000000, 1.000000, 0.000000))
+    sheet.setBackground('E1:E16384', (1.000000, 1.000000, 0.000000))
     sheet.recompute()
 
 
