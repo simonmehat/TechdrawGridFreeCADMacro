@@ -131,20 +131,33 @@ def DrawingBoundingBox(XY):
     return Length
 
 
+def GridGap(XY):
+    print("---DrawingBoundingBox")
+    if XY == "X":  # if we want to recover the X length of the grid
+        Gap = App.ActiveDocument.getObjectsByLabel(
+            "origin")[0].X_grid_gap  # set Length on the origin X_grid_size
+    if XY == "Y":  # if we want to recover the Y Length of the grid
+        Gap = App.ActiveDocument.getObjectsByLabel("origin")[0].Y_grid_gap
+    # remove the unit of measurement of the Length
+    Gap = float(str(Gap)[:str(Gap).find("m") - 1])
+    print("Gap : ", Gap)
+    return Gap
+
+
 # This function create cosmetic line grid on TechDraw, with list of line position, the position of 0 projected on view, the Length of the grid
-def TechDrawGridLine(ListOfGridGlobalPosition, Xpos, Ypos, Length):
+def TechDrawGridLine(ListOfGridGlobalPosition, Xpos, Ypos, Length, Gap):
     # This function
     # find the Start and End point pf the grid line (because to create cosmetic line, we must have 2 point)
-    def DefineStartEndPointOfCosmeticLine(GridValue, Xpos, Ypos, Length, Move):
+    def DefineStartEndPointOfCosmeticLine(GridValue, Xpos, Ypos, Length, Move, Gap):
         print("---DefineStartEndPointOfCosmeticLine")
         if ListOfGridGlobalPosition[0] == 90:  # if the line is vertical
-            Start = FreeCAD.Vector(GridValue + Xpos, 0 + Ypos + Move - 500, 0)
+            Start = FreeCAD.Vector(GridValue + Xpos, 0 + Ypos + Move - Gap, 0)
             End = FreeCAD.Vector(
-                GridValue + Xpos, Length + Ypos + Move - 500, 0)
+                GridValue + Xpos, Length + Ypos + Move - Gap, 0)
         elif ListOfGridGlobalPosition[0] == 0:  # if the line is horizontal
-            Start = FreeCAD.Vector(0 + Xpos + Move - 500, GridValue + Ypos, 0)
+            Start = FreeCAD.Vector(0 + Xpos + Move - Gap, GridValue + Ypos, 0)
             End = FreeCAD.Vector(Length + Xpos + Move -
-                                 500, GridValue + Ypos, 0)
+                                 Gap, GridValue + Ypos, 0)
         ListStartEnd = [Start, End]
         return ListStartEnd
 
@@ -207,7 +220,7 @@ def TechDrawGridLine(ListOfGridGlobalPosition, Xpos, Ypos, Length):
         GridValue = ListOfGridGlobalPosition[i + 1]
         if Length < 8000:  #  if the Length of grid line is under 8000
             DrawLineWithPoint(DefineStartEndPointOfCosmeticLine(
-                GridValue, Xpos, Ypos, Length, 0))
+                GridValue, Xpos, Ypos, Length, 0, Gap))
         #  if the Length of the grid line is more than 8000 (this part exists because FreeCAD can't draw a line more than 10 000 mm Length ). Also, we will draw several line
         elif Length >= 8000:
             LineNumber = 1
@@ -216,11 +229,11 @@ def TechDrawGridLine(ListOfGridGlobalPosition, Xpos, Ypos, Length):
             LineSize = Length / LineNumber  # calcul the Length of little part of line
             print("Ligne : ", LineSize, "*", LineNumber)
             DrawLineWithPoint(DefineStartEndPointOfCosmeticLine(
-                GridValue, Xpos, Ypos, LineSize, 0))  # draw the first line with a point (for the dimension)
+                GridValue, Xpos, Ypos, LineSize, 0, Gap))  # draw the first line with a point (for the dimension)
             for i in range(LineNumber - 1):  # draw the followed line without point
                 Move = (i + 1) * LineSize  # move the start of the line
                 DrawLine(DefineStartEndPointOfCosmeticLine(
-                    GridValue, Xpos, Ypos, LineSize, Move))
+                    GridValue, Xpos, Ypos, LineSize, Move, Gap))
 
 
 # Add dimension between the actual vertex and the last vertex
@@ -302,9 +315,9 @@ PositionList = OriginCorrection()
 Xpos = PositionList[0]
 Ypos = PositionList[1]
 TechDrawGridLine(GetSpreadsheetGridDimension("Grid", "B", 90),
-                 Xpos, Ypos, DrawingBoundingBox("Y"))
+                 Xpos, Ypos, DrawingBoundingBox("Y"), GridGap("Y"))
 
 TechDrawGridLine(GetSpreadsheetGridDimension("Grid", "F", 0),
-                 Xpos, Ypos, DrawingBoundingBox("X"))
+                 Xpos, Ypos, DrawingBoundingBox("X"), GridGap("X"))
 
 print("---- End of Macro grid on techdraw ----")

@@ -15,6 +15,12 @@ def CreateOriginBox():  # Create the orgin box
     box.X_grid_size = 2000  # set default value
     box.Y_grid_size = 2000
 
+    # add grid_gap of the grid property
+    box.addProperty("App::PropertyDistance", "X_grid_gap")
+    box.addProperty("App::PropertyDistance", "Y_grid_gap")
+    box.X_grid_size = 2000  # set default value
+    box.Y_grid_size = 2000
+
 
 def CreateSpreadsheet():  # Create a spreadsheet
     sheet = App.ActiveDocument.addObject("Spreadsheet::Sheet", "Grid")
